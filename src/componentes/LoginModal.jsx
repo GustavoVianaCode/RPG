@@ -10,23 +10,27 @@ export function LoginModal({ isOpen, onClose }) {
   // Pegamos a função de login e o loading (estado de carregamento) do contexto
   const { login, loading } = useContext(AuthContext);
 
-  // Estados locais para armazenar o email e a senha digitados pelo usuário
-  const [email, setEmail] = useState("");
+  // Estados locais para armazenar o email/username e a senha digitados pelo usuário
+  const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
   // Função que lida com o envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault(); // Evita o recarregamento da página ao enviar o form
+    setError(""); // Limpa erros anteriores
 
     try {
       // Tenta fazer login com os dados informados
-      await login({ email, password });
+      await login({ emailOrUsername, password });
       // Se o login for bem-sucedido, fecha o modal
       onClose();
     } catch (error) {
-      // Se der erro, mostra no console e alerta o usuário
+      // Se der erro, mostra no console e atualiza o estado de erro
       console.error("Erro no login:", error);
-      alert("E-mail ou senha inválidos. Tente novamente.");
+      setError(
+        error.response?.data?.message ||
+          "E-mail/usuário ou senha inválidos. Tente novamente."
+      );
     }
   };
 
@@ -37,12 +41,12 @@ export function LoginModal({ isOpen, onClose }) {
 
       {/* Formulário de login */}
       <form onSubmit={handleSubmit}>
-        {/* Campo de e-mail */}
-        <label>E-mail:</label>
+        {/* Campo de e-mail ou nome de usuário */}
+        <label>E-mail ou Usuário:</label>
         <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)} // Atualiza o estado conforme digita
+          type="text"
+          value={emailOrUsername}
+          onChange={(e) => setEmailOrUsername(e.target.value)} // Atualiza o estado conforme digita
           required // Campo obrigatório
         />
 
@@ -54,6 +58,13 @@ export function LoginModal({ isOpen, onClose }) {
           onChange={(e) => setPassword(e.target.value)} // Atualiza a senha
           required
         />
+
+        {/* Exibe mensagem de erro se houver */}
+        {error && (
+          <p className="error-message" style={{ color: "red" }}>
+            {error}
+          </p>
+        )}
 
         {/* Botão de envio */}
         <button type="submit" disabled={loading}>

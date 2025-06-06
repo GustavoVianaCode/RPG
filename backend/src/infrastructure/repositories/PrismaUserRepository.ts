@@ -6,22 +6,39 @@ export class PrismaUserRepository implements IUserRepository {
   async create(
     data: Omit<User, "id" | "createdAt" | "updatedAt">
   ): Promise<User> {
-    const user = await prisma.user.create({
-      data: {
+    try {
+      console.log("PrismaUserRepository.create - attempting to create user:", {
         username: data.username,
-        email: data.email,
-        passwordHash: data.passwordHash,
-      },
-    });
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      passwordHash: user.passwordHash,
-      googleId: user.googleId ?? undefined,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+        email: data.email
+      });
+      
+      const user = await prisma.user.create({
+        data: {
+          username: data.username,
+          email: data.email,
+          passwordHash: data.passwordHash,
+        },
+      });
+      
+      console.log("PrismaUserRepository.create - user created successfully:", {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      });
+      
+      return {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        passwordHash: user.passwordHash,
+        googleId: user.googleId ?? undefined,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
+    } catch (error) {
+      console.error("PrismaUserRepository.create - error creating user:", error);
+      throw error;
+    }
   }
 
   async findByEmail(email: string): Promise<User | null> {

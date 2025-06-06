@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaCharacterSheetRepository } from "../../infrastructure/repositories/PrismaCharacterSheetRepository";
+import { characterSheetRepository } from "../../infrastructure/database/mockRepositories";
 import { CreateCharacterSheetUseCase } from "../../application/use-cases/CreateCharacterSheetUseCase";
 import { AppError } from "../../application/errors/AppError";
 
@@ -25,8 +25,7 @@ export class CharacterSheetController {
         charisma,
       } = req.body;
 
-      const sheetRepo = new PrismaCharacterSheetRepository();
-      const createUseCase = new CreateCharacterSheetUseCase(sheetRepo);
+      const createUseCase = new CreateCharacterSheetUseCase(characterSheetRepository);
 
       const sheet = await createUseCase.execute({
         userId,
@@ -55,13 +54,40 @@ export class CharacterSheetController {
   ): Promise<void> {
     try {
       const userId = req.user.id;
-      const sheetRepo = new PrismaCharacterSheetRepository();
-      const sheets = await sheetRepo.findAllByUserId(userId);
+      const sheets = await characterSheetRepository.findAllByUserId(userId);
       res.json(sheets);
     } catch (err) {
       next(err); // Passa o erro para o middleware de tratamento de erros
     }
   }
 
-  // Você poderá adicionar outros métodos: getOne, update, delete etc.
+  public static async delete(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const userId = req.user.id;
+      const sheetId = req.params.id;
+
+      // Verificar se a ficha pertence ao usuário
+      const sheet = await characterSheetRepository.findById(sheetId);
+      
+      if (!sheet) {
+        throw new AppError("Ficha não encontrada", 404);
+      }
+      
+      if (sheet.userId !== userId) {
+        throw new AppError("Você não tem permissão para excluir esta ficha", 403);
+      }
+      
+      await characterSheetRepository.delete(sheetId);
+      
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  // Você poderá adicionar outros métodos: getOne, update etc.
 }

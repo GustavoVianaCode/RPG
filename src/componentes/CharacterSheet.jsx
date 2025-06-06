@@ -4,15 +4,18 @@ import "../style/characterSheet.css";
 import html2pdf from "html2pdf.js";
 import { AuthContext } from "../context/AuthContext"; // Importar o AuthContext
 import apiClient from "../services/api"; // Importar o apiClient que você configurou
+import { useNavigate } from "react-router-dom"; // Para redirecionar após salvar
 
 // IMPORTAR ÍCONES DO LUCIDE
 import { Heart, Shield } from "lucide-react";
 
 // Componente principal da ficha
 const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext); // Acessar o usuário logado do contexto
 
   const [isEditing, setIsEditing] = useState(false);
+  const [saveStatus, setSaveStatus] = useState({ loading: false, error: null });
   const [edited, setEdited] = useState({
     name: "",
     race: "",
@@ -92,51 +95,50 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
       .save();
   };
 
-  // NOVA FUNÇÃO PARA SALVAR A FICHA NO BANCO DE DADOS
+  // FUNÇÃO PARA SALVAR A FICHA NO BANCO DE DADOS
   const handleSaveSheetToDb = async () => {
     if (!user) {
       alert("Você precisa estar logado para salvar a ficha!");
       return;
     }
 
+    setSaveStatus({ loading: true, error: null });
+
     // Prepara os dados da ficha para enviar ao backend.
-    // Certifique-se que os nomes dos campos aqui correspondem ao seu modelo Prisma 'Character'
-    const constituicaoAtual = parseInt(edited.Constituição) || 0;
-    const destrezaAtual = parseInt(edited.Destreza) || 0;
-
-    const vidaCalculada = constituicaoAtual * 5 + 10;
-    const escudoCalculado = Math.floor(destrezaAtual + 7);
-
+    // Os nomes dos campos devem corresponder aos esperados no CharacterSheetController
     const sheetDataToSave = {
-      name: edited.name,
+      characterName: edited.name,
       race: edited.race,
-      className: edited.class, // No schema.prisma é 'className'
-      attributes: {
-        // Agrupando atributos em um objeto JSON
-        Força: parseInt(edited.Força) || 0,
-        Destreza: parseInt(edited.Destreza) || 0,
-        Constituição: parseInt(edited.Constituição) || 0,
-        Inteligência: parseInt(edited.Inteligência) || 0,
-        Sabedoria: parseInt(edited.Sabedoria) || 0,
-        Carisma: parseInt(edited.Carisma) || 0,
-      },
-      imageUrl: edited.image || null, // URL da imagem
-      health: vidaCalculada, // ADICIONADO
-      shield: escudoCalculado,
-      userId: user.id, // Associa a ficha ao usuário logado (se o seu 'user' no AuthContext tiver 'id')
-      // Se o ID do usuário no AuthContext for diferente (ex: _id), ajuste aqui.
+      className: edited.class,
+      characterImageUrl: edited.image || null,
+      strength: parseInt(edited.Força) || 0,
+      dexterity: parseInt(edited.Destreza) || 0,
+      constitution: parseInt(edited.Constituição) || 0, 
+      intelligence: parseInt(edited.Inteligência) || 0,
+      wisdom: parseInt(edited.Sabedoria) || 0,
+      charisma: parseInt(edited.Carisma) || 0,
     };
 
     try {
-      // Você precisará criar este endpoint no seu backend
+      console.log("Enviando dados para a API:", sheetDataToSave);
+      // Faz a requisição para a API, o token será adicionado pelo interceptor
       const response = await apiClient.post("/characters", sheetDataToSave);
+      
       alert("Ficha salva com sucesso!");
       console.log("Ficha salva:", response.data);
-      // Aqui você pode querer redirecionar o usuário para a página de "Minhas Fichas"
-      // ou atualizar o estado de alguma forma.
+      
+      // Redirecionar para a página "Minhas Fichas" após salvar com sucesso
+      navigate("/sheets");
+      
     } catch (error) {
       console.error("Erro ao salvar a ficha:", error);
+      if (error.response) {
+        console.error("Detalhes do erro:", error.response.data);
+      }
+      setSaveStatus({ loading: false, error: error.response?.data?.message || "Erro ao salvar a ficha" });
       alert("Erro ao salvar a ficha. Verifique o console para mais detalhes.");
+    } finally {
+      setSaveStatus({ loading: false, error: null });
     }
   };
 
@@ -330,11 +332,22 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
           <>
             <button onClick={() => setIsEditing(true)}>✏️ Editar Ficha</button>
             <button onClick={handleGeneratePDF}>📄 Gerar PDF</button>
-            {/* NOVO BOTÃO DE SALVAR NO BANCO DE DADOS */}
-            {user && ( // Só mostra o botão se o usuário estiver logado
-              <button onClick={handleSaveSheetToDb}>💾 Salvar Ficha</button>
+            {/* BOTÃO DE SALVAR NO BANCO DE DADOS - Só mostra se o usuário estiver logado */}
+            {user && (
+              <button 
+                onClick={handleSaveSheetToDb} 
+                disabled={saveStatus.loading}
+              >
+                {saveStatus.loading ? "Salvando..." : "💾 Salvar Ficha"}
+              </button>
             )}
           </>
+        )}
+        {/* Mostrar erro de salvamento se houver */}
+        {saveStatus.error && (
+          <p style={{ color: "red", marginTop: "10px" }}>
+            {saveStatus.error}
+          </p>
         )}
       </div>
     </>

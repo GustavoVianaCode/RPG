@@ -7,26 +7,54 @@ import { Modal } from "./Modal"; // Importa o componente Modal reutilizável
 
 // Componente que exibe o modal de cadastro de usuário
 export function RegisterModal({ isOpen, onClose }) {
-  // Acessa a função de cadastro e o estado de carregamento do AuthContext
-  const { register, loading } = useContext(AuthContext);
+  // Acessa a função de cadastro do AuthContext
+  const { register } = useContext(AuthContext);
 
   // Estados locais para armazenar os dados digitados pelo usuário
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // Função que será chamada ao enviar o formulário
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Adicionando estado de loading local// Função que será chamada ao enviar o formulário
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previne o comportamento padrão do formulário (recarregar página)
-    try {
+    setError(""); // Limpa erros anteriores
+
+    // Validação básica
+    if (!username || !email || !password) {
+      setError("Todos os campos são obrigatórios");
+      return;
+    }
+
+    // Validação de formato de e-mail
+    if (!email.includes('@') || !email.includes('.')) {
+      setError("E-mail inválido");
+      return;
+    }
+
+    // Validação de senha
+    if (password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres");
+      return;
+    }    try {
+      console.log("Iniciando cadastro com:", { username, email, password });
+      setLoading(true);
       // Tenta registrar o usuário com os dados fornecidos
       await register({ username, email, password });
       // Se for bem-sucedido, fecha o modal
       onClose();
     } catch (error) {
-      // Se ocorrer erro, exibe no console e alerta o usuário
-      console.error("Erro no cadastro:", error);
-      alert("Erro ao cadastrar. Verifique os dados e tente novamente.");
+      // Se ocorrer erro, exibe no console e atualiza o estado de erro
+      console.error("Erro no cadastro:", error);      if (error.code === "ERR_NETWORK") {
+        setError("Erro de conexão com o servidor. Verifique se o servidor está rodando.");
+      } else {
+        setError(
+          error.response?.data?.message ||
+            "Erro ao cadastrar. Verifique os dados e tente novamente."
+        );
+      }
+    } finally {
+      setLoading(false); // Desativa o loading independentemente do resultado
     }
   };
 
@@ -60,6 +88,13 @@ export function RegisterModal({ isOpen, onClose }) {
           onChange={(e) => setPassword(e.target.value)} // Atualiza o estado ao digitar
           required
         />
+
+        {/* Exibe mensagem de erro se houver */}
+        {error && (
+          <p className="error-message" style={{ color: "red" }}>
+            {error}
+          </p>
+        )}
 
         {/* Botão de envio */}
         <button type="submit" disabled={loading}>
