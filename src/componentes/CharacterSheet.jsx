@@ -265,7 +265,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
                   <input
                     type="number"
                     min="0"
-                    max="20" // O limite real de pontos será controlado pela lógica 'remaining'
+                    max="30" // O limite real de pontos será controlado pela lógica 'remaining'
                     value={edited[attr]}
                     onChange={(e) => {
                       const newValue = parseInt(e.target.value) || 0; // Mudado para 0 se NaN
@@ -278,8 +278,8 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
 
                       const adjustedValue = Math.min(
                         Math.max(newValue, 0), // Atributo pode ser 0
-                        // Não pode exceder 20 E não pode exceder os pontos disponíveis
-                        Math.min(20, pointsAvailableForThisAttr)
+                        // Não pode exceder 30 E não pode exceder os pontos disponíveis
+                        Math.min(30, pointsAvailableForThisAttr)
                       );
                       handleChange(attr, adjustedValue);
                     }}
