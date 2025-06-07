@@ -1,26 +1,210 @@
+/* src/style/Sheets.css */
+
+/*
+  Esta folha de estilo organiza as fichas de personagem em uma grade responsiva,
+  com cada ficha apresentada como um card.
+*/
+
+/*
+  Certifique-se de que a fonte "FonteHome" está sendo carregada corretamente.
+  Se ela já for carregada globalmente (ex: em index.css ou App.css),
+  você pode remover este @font-face daqui para evitar carregamentos duplicados.
+*/
+@font-face {
+  font-family: "FonteHome";
+  src: url("/fontes/BreatheFire.ttf") format("truetype"); /* Verifique o caminho real da sua fonte */
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Container principal da página "Minhas Fichas" */
 .sheets-container {
-  background-image: url("/imagens/fichasus.png"); /* ajuste esse nome se o arquivo for diferente */
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+  background-image: url("/imagens/fichasus.png"); /* Imagem de fundo principal, ajuste o nome se necessário */
+  background-size: cover; /* Garante que a imagem cubra todo o contêiner */
+  background-position: center; /* Centraliza a imagem de fundo */
+  min-height: 100vh; /* Garante que o container ocupe a altura total da viewport */
+  padding: 4rem 2rem; /* Espaçamento interno para o conteúdo não colar nas bordas */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column; /* Organiza o título acima do grid de fichas */
+  align-items: center; /* Centraliza o conteúdo horizontalmente */
+  color: #fff; /* Cor padrão para o texto principal */
+  font-family: "FonteHome", sans-serif; /* Aplica a fonte personalizada */
 }
 
-.sheets-content {
-  padding: 2rem 3rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+/* Título da página "Minhas Fichas" */
+.sheets-title {
+  font-size: 3rem; /* Tamanho grande para o título */
+  margin-bottom: 2rem; /* Espaçamento abaixo do título */
+  color: #f0e6d6; /* Cor do título que contrasta com o fundo */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombra para o título para melhor legibilidade */
+}
+
+/* Estilos para mensagens de carregamento, erro e "sem fichas" */
+.loading-message,
+.error-message,
+.no-sheets {
+  font-size: 1.5rem;
+  color: #f0e6d6;
+  margin-top: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Container do Grid onde as fichas serão exibidas */
+.sheets-grid {
+  display: grid;
+  /* Cria um grid responsivo:
+     - repeat(auto-fit, ...): Cria o máximo de colunas que cabem
+     - minmax(280px, 1fr): Cada coluna terá no mínimo 280px, crescendo igualmente (1fr)
+     Isso criará automaticamente 3 ou 4 colunas dependendo da largura da tela.
+  */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem; /* Espaçamento entre os cards na grade */
+  width: 100%; /* Ocupa a largura total do seu container */
+  max-width: 1300px; /* Limita a largura máxima do grid para melhor visualização em telas grandes */
+  margin-top: 2rem;
+  justify-content: center; /* Centraliza os cards dentro do grid */
+}
+
+/* Estilo para cada CARD de ficha individual */
+.sheet-card {
+  background-color: rgba(255, 255, 255, 0.95); /* Fundo quase branco com leve transparência */
+  border-radius: 18px; /* Cantos mais arredondados */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Sombra mais pronunciada */
+  padding: 1.8rem; /* Espaçamento interno do card */
+  display: flex;
+  flex-direction: column; /* Organiza o conteúdo do card em coluna */
+  align-items: center; /* Centraliza os itens horizontalmente dentro do card */
   text-align: center;
+  color: #482705; /* Cor do texto que combina com o tema rústico/RPG */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave para efeitos de hover */
+  min-height: 480px; /* Altura mínima para padronizar os cards */
+  justify-content: space-between; /* Distribui o espaço para empurrar os botões para baixo */
+  border: 2px solid #6b5e45; /* Borda sutil que remete a madeira/pergaminho */
 }
 
-.sheets-content h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+.sheet-card:hover {
+  transform: translateY(-10px); /* Efeito de elevação mais notável ao passar o mouse */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); /* Sombra mais intensa no hover */
 }
 
-.sheets-content p {
-  font-size: 1.2rem;
-  color: #333;
+/* Seção da imagem do personagem dentro do card */
+.sheet-image {
+  width: 180px; /* Largura da imagem */
+  height: 220px; /* Altura da imagem */
+  border-radius: 10px; /* Cantos arredondados para a imagem */
+  overflow: hidden; /* Garante que a imagem se ajuste ao contêiner */
+  margin-bottom: 1.5rem; /* Espaçamento abaixo da imagem */
+  border: 4px solid #950602; /* Borda vermelha forte para a imagem */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sheet-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Recorta a imagem para preencher o espaço, mantendo a proporção */
+}
+
+/* Seção de informações do personagem dentro do card */
+.sheet-info {
+  margin-bottom: 1.8rem; /* Espaçamento abaixo das informações */
+  width: 100%; /* Garante que as informações ocupem a largura do card */
+}
+
+.sheet-info h3 {
+  font-size: 2rem; /* Tamanho da fonte para o nome do personagem */
+  margin-bottom: 0.6rem;
+  color: #482705; /* Cor para o nome */
+  font-family: "FonteHome", sans-serif; /* Aplica a fonte personalizada */
+  white-space: nowrap; /* Impede quebra de linha */
+  overflow: hidden; /* Oculta o texto que excede a largura */
+  text-overflow: ellipsis; /* Adiciona reticências se o texto for muito longo */
+}
+
+.sheet-info p {
+  font-size: 1.1rem; /* Tamanho da fonte para raça, classe, data */
+  margin: 0.4rem 0; /* Espaçamento entre os parágrafos */
+  color: #6b5e45; /* Cor mais suave para os detalhes */
+}
+
+.action-button {
+  background-color: #0a7122 !important; /* Cor de fundo verde escuro para o botão */
+  color: #fff !important; /* Texto/ícone branco */
+  border: 2px solid #075c1d !important; /* Borda mais escura */
+  padding: 0.8rem 1.2rem; /* Aumenta o padding para botões maiores */
+  border-radius: 10px; /* Cantos arredondados */
+  cursor: pointer;
+  font-size: 1.1rem; /* Texto maior nos botões */
+  font-family: "FonteHome", sans-serif; /* Fonte personalizada */
+  display: flex; /* Para alinhar o ícone e o texto */
+  align-items: center; /* Alinha verticalmente */
+  justify-content: center; /* Centraliza o conteúdo (ícone + texto) */
+  gap: 0.6rem; /* Espaço entre ícone e texto */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #4caf50 !important; /* Verde mais claro no hover */
+  transform: translateY(-5px); /* Efeito de elevação no hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra mais forte no hover */
+}
+
+/* Estilo específico para o botão de deletar */
+.action-button.delete {
+  background-color: #950602 !important; /* Vermelho escuro para deletar */
+  border-color: #6a0400 !important; /* Borda mais escura */
+}
+
+.action-button.delete:hover {
+  background-color: #d32f2f !important; /* Vermelho mais claro no hover */
+}
+
+/* Media Queries para responsividade */
+
+/* Telas muito pequenas (celulares em pé) */
+@media (max-width: 576px) {
+  .sheets-container {
+    padding: 2rem 1rem;
+  }
+  .sheets-title {
+    font-size: 2.5rem;
+  }
+  .sheets-grid {
+    grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+    gap: 1.5rem;
+  }
+  .sheet-card {
+    min-height: auto; /* Deixa a altura flexível */
+  }
+  .sheet-info h3 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Telas pequenas (celulares na horizontal, tablets pequenos) */
+@media (min-width: 577px) and (max-width: 768px) {
+  .sheets-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 2 colunas, se couber */
+    gap: 1.5rem;
+  }
+}
+
+/* Telas médias (tablets, laptops menores) */
+@media (min-width: 769px) and (max-width: 992px) {
+  .sheets-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 3 colunas, se couber */
+  }
+}
+
+/* Telas grandes (laptops maiores, desktops) */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .sheets-grid {
+    grid-template-columns: repeat(3, 1fr); /* Força 3 colunas */
+  }
+}
+
+/* Telas muito grandes (desktops largos) - Para 4 colunas */
+@media (min-width: 1201px) {
+  .sheets-grid {
+    grid-template-columns: repeat(4, 1fr); /* Força 4 colunas */
+  }
 }
