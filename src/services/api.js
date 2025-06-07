@@ -5,7 +5,7 @@ import axios from "axios";
 
 const apiClient = axios.create({
   // A URL base da sua API backend.
-  baseURL: "http://localhost:5000", // Certifique-se de que essa porta corresponde à porta do seu backend
+  baseURL: "http://localhost:5000/api", // Certifique-se de que essa porta corresponde à porta do seu backend
   headers: {
     "Content-Type": "application/json",
   },
