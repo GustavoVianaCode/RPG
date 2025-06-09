@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
       
       try {
         // Faz a requisição de cadastro para a API com tratamento de erro melhorado
-        const response = await apiClient.post("/api/auth/register", {
+        const response = await apiClient.post("/auth/register", {
           username,
           email,
           password
@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
       console.log("Tentando login com:", { emailOrUsername, password });
       
       // Faz a requisição de login para a API
-      const response = await apiClient.post("/api/auth/login", {
+      const response = await apiClient.post("/auth/login", {
         emailOrUsername,
         password
       });

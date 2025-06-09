@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 export class JwtProvider {
   public static sign(
     payload: string | object | Buffer,
-    expiresIn: string = "1d"
+    expiresIn: string = "20d"
   ): string {
     if (!JWT_SECRET) {
       throw new Error("JWT_SECRET não está definido em process.env");
