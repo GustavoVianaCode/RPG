@@ -19,7 +19,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
   const [edited, setEdited] = useState({
     name: "",
     race: "",
-    class: "", // Mantido como 'class' conforme seu código original, mas lembre-se que 'className' é usado no schema.prisma
+    className: "", // Mantido como 'class' conforme seu código original, mas lembre-se que 'className' é usado no schema.prisma
     Força: 0,
     Destreza: 0,
     Constituição: 0,
@@ -51,7 +51,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
       setEdited({
         name: character.name || "",
         race: character.race || "",
-        class: character.class || "", // ou character.className, dependendo do que CharacterForm envia
+        className: character.className || "", // ou character.className, dependendo do que CharacterForm envia
         Força: character.Força || 0,
         Destreza: character.Destreza || 0,
         Constituição: character.Constituição || 0,
@@ -109,7 +109,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
     const sheetDataToSave = {
       characterName: edited.name,
       race: edited.race,
-      className: edited.class,
+      className: edited.className,  //alteração de edited.class para character.className
       characterImageUrl: edited.image || null,
       strength: parseInt(edited.Força) || 0,
       dexterity: parseInt(edited.Destreza) || 0,
@@ -204,7 +204,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
               <strong>Classe:</strong>{" "}
               {isEditing ? (
                 <select
-                  value={edited.class} // ou edited.className
+                  value={edited.className} // ou edited.className
                   onChange={(e) => handleChange("class", e.target.value)} // ou "className"
                 >
                   <option value="">Selecione...</option>
@@ -222,7 +222,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
                   <option value="Patruleiro">Patruleiro</option>
                 </select>
               ) : (
-                <span>{displayCharacter.class}</span> // ou displayCharacter.className
+                <span>{displayCharacter.className}</span> // ou displayCharacter.className
               )}
             </p>
           </div>

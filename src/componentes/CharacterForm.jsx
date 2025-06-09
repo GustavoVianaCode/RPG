@@ -10,7 +10,7 @@ function CharacterForm({ onCharacterSubmit }) {
   const [character, setCharacter] = useState({
     name: "",
     race: "",
-    class: "",
+    className: "",
     Força: 0,
     Destreza: 0,
     Constituição: 0,
@@ -129,9 +129,9 @@ function CharacterForm({ onCharacterSubmit }) {
       <div className="form-linha">
         <label htmlFor="class">Classe:</label>
         <select
-          name="class"
+          name="className"
           id="class"
-          value={character.class}
+          value={character.className}
           onChange={handleTextChange}
           required
         >

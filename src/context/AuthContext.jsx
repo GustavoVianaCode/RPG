@@ -15,17 +15,37 @@ export function AuthProvider({ children }) {
 
   // useEffect é executado uma vez quando o componente carrega
   // Aqui, ele verifica se já existe um usuário salvo no localStorage
-  useEffect(() => {
-    const token = localStorage.getItem("token"); // busca o token salvo
-    const storedUser = localStorage.getItem("user"); // busca o usuário salvo
-    if (token && storedUser) {
-      // Se existir token e usuário, define o usuário no estado
-      setUser(JSON.parse(storedUser)); // transforma a string em objeto novamente
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token"); // busca o token salvo
+  //   const storedUser = localStorage.getItem("user"); // busca o usuário salvo
+  //   if (token && storedUser) {
+  //     // Se existir token e usuário, define o usuário no estado
+  //     setUser(JSON.parse(storedUser)); // transforma a string em objeto novamente
       
-      // Configura o token para todas as requisições futuras
+  //     // Configura o token para todas as requisições futuras
+  //     apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  //   }
+  // }, []);  // Função para registrar um novo usuário
+
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  const storedUser = localStorage.getItem("user");
+  // Adiciona uma verificação para garantir que 'storedUser' não é a string "undefined"
+  // e usa try-catch para o caso de o JSON estar corrompido.
+  if (token && storedUser && storedUser !== "undefined") {
+    try {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } catch (e) {
+      console.error("Falha ao analisar dados do usuário no localStorage, limpando...", e);
+      // Se houver um erro, limpa o estado inválido para evitar loops de erro.
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
-  }, []);  // Função para registrar um novo usuário
+  }
+  }, []);
+
   const register = async ({ username, email, password }) => {
     try {
       setLoading(true); // ativa o carregamento
