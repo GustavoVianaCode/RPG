@@ -155,6 +155,15 @@ function CharacterForm({ onCharacterSubmit }) {
       <label>
         Imagem do Personagem:
         <input type="file" accept="image/*" onChange={handleImageChange} />
+        <label htmlFor="image">URL da Imagem:</label>
+        <input
+            type="url"
+            name="image"
+            id="image"
+            placeholder="https://exemplo.com/imagem.jpg"
+            value={character.image || ''}
+            onChange={handleTextChange} // Reutilize a função que já lida com texto
+        />
       </label>
 
       {/* Pré-visualização da imagem */}
