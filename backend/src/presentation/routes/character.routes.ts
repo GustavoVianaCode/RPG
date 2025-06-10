@@ -11,4 +11,6 @@ characterRouter.post("/", CharacterSheetController.create);
 characterRouter.get("/", CharacterSheetController.listByUser);
 characterRouter.delete("/:id", CharacterSheetController.delete);
 
+characterRouter.get("/:id", ensureAuthenticated, CharacterSheetController.findById);
+
 export { characterRouter };

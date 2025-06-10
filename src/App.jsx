@@ -10,6 +10,7 @@ import { LoginModal } from "./componentes/LoginModal";
 import { RegisterModal } from "./componentes/RegisterModal";
 // Importa o contexto de autenticação
 import { AuthContext } from "./context/AuthContext";
+import EditPage from './pages/EditPage';  // Importa a página de edição de ficha adicionado 10.06.2025
 // Importa o CSS global do app
 import "../src/App.css";
 // Componente principal da aplicação
@@ -119,6 +120,8 @@ export default function App() {
 
           {/* Rota da página de criação de ficha */}
           <Route path="/create" element={<Create />} />
+
+          <Route path="/edit/:sheetId" element={<EditPage />} /> {/* Rota da página de edição de ficha, visível apenas se o usuário estiver logado adicionado 10.06.2025 */}
 
           {/* Rota das fichas salvas, visível apenas se o usuário estiver logado */}
           {user && <Route path="/sheets" element={<Sheets />} />}

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { characterSheetRepository } from "../../infrastructure/database/mockRepositories";
 import { CreateCharacterSheetUseCase } from "../../application/use-cases/CreateCharacterSheetUseCase";
+import { FindCharacterSheetByIdUseCase } from "../../application/use-cases/FindCharacterSheetByIdUseCase"; // << 1. IMPORTE O NOVO USE CASE
 import { AppError } from "../../application/errors/AppError";
 
 export class CharacterSheetController {
@@ -58,6 +59,34 @@ export class CharacterSheetController {
       res.json(sheets);
     } catch (err) {
       next(err); // Passa o erro para o middleware de tratamento de erros
+    }
+  }
+
+  public static async findById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      // Pega o ID da ficha dos parâmetros da URL (ex: /api/characters/meu-id-123)
+      const { id } = req.params;
+
+      // O repositório já tem um método findById, então podemos usá-lo diretamente
+      // para simplificar, mas o ideal seria criar um UseCase para isso.
+      const sheet = await characterSheetRepository.findById(id);
+
+      if (!sheet) {
+        throw new AppError("Ficha não encontrada", 404);
+      }
+
+      // Opcional: Verificar se a ficha pertence ao usuário logado
+      if (sheet.userId !== req.user.id) {
+         throw new AppError("Acesso não autorizado a esta ficha", 403);
+      }
+      
+      res.status(200).json(sheet);
+    } catch (err) {
+      next(err);
     }
   }
 

@@ -14,6 +14,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext); // Acessar o usuário logado do contexto
 
+  const [isDirty, setIsDirty] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [saveStatus, setSaveStatus] = useState({ loading: false, error: null });
   const [edited, setEdited] = useState({
@@ -67,6 +68,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
   }, [character]);
 
   const handleChange = (field, value) => {
+    setIsDirty(true);
     setEdited((prev) => ({
       ...prev,
       [field]: value,

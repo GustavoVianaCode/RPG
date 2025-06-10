@@ -1,5 +1,7 @@
 // Importa React e os hooks useEffect e useState para controlar estado e efeitos colaterais
 import React, { useEffect, useState, useContext } from "react";
+import ReactDOM from 'react-dom/client'; 
+import SheetLayout from '../componentes/SheetLayout';
 // Importa o módulo de comunicação com a API
 import apiClient from "../services/api";
 // Importa useNavigate para navegação
@@ -71,63 +73,35 @@ export default function Sheets() {
 
   // Função para gerar um PDF da ficha
   const handleDownloadPDF = (sheet) => {
-    // Cria um elemento temporário para renderizar a ficha
-    const container = document.createElement('div');
-    container.className = 'character-sheet';
-    
-    // Estrutura básica da ficha
-    container.innerHTML = `
-      <h2 class="sheet-title">Ficha de Personagem</h2>
-      <div class="sheet-header">
-        <div class="basic-info">
-          <p><strong>Nome:</strong> ${sheet.characterName}</p>
-          <p><strong>Raça:</strong> ${sheet.race}</p>
-          <p><strong>Classe:</strong> ${sheet.className}</p>
-        </div>
-        ${sheet.characterImageUrl ? `<img src="${sheet.characterImageUrl}" alt="Personagem" class="character-image">` : ''}
-      </div>
-      <div class="status-section">
-        <div class="status-item">
-          <span>Vida: ${sheet.constitution * 5 + 10}</span>
-        </div>
-        <div class="status-item">
-          <span>Escudo: ${Math.floor(sheet.dexterity + 7)}</span>
-        </div>
-      </div>
-      <div class="attributes-box">
-        <h3>Atributos</h3>
-        <div class="attributes-grid">
-          <div class="attr"><strong>Força:</strong> ${sheet.strength}</div>
-          <div class="attr"><strong>Destreza:</strong> ${sheet.dexterity}</div>
-          <div class="attr"><strong>Constituição:</strong> ${sheet.constitution}</div>
-          <div class="attr"><strong>Inteligência:</strong> ${sheet.intelligence}</div>
-          <div class="attr"><strong>Sabedoria:</strong> ${sheet.wisdom}</div>
-          <div class="attr"><strong>Carisma:</strong> ${sheet.charisma}</div>
-        </div>
-      </div>
-    `;
+  // 1. Cria um container temporário e invisível no corpo da página
+  console.log("DOWNLOAD SOLICITADO PARA A FICHA:", sheet);   //adicoinado 10.06.2025
+  const container = document.createElement('div');
+  document.body.appendChild(container);
 
-    // Adiciona temporariamente ao DOM
-    document.body.appendChild(container);
-    container.style.visibility = 'hidden';
-    container.style.position = 'absolute';
+  // 2. Usa o React para renderizar o layout da ficha nesse container
+  const root = ReactDOM.createRoot(container);
+  root.render(<SheetLayout character={sheet} />);
 
-    // Gera o PDF
-    html2pdf()
-      .from(container)
-      .set({
-        margin: 10,
-        filename: `${sheet.characterName || "ficha"}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 3 },
-        jsPDF: { unit: "mm", format: [240, 190], orientation: "landscape" },
-      })
-      .save()
-      .then(() => {
-        // Remove o elemento temporário após gerar o PDF
-        document.body.removeChild(container);
-      });
-  };
+  // 3. Aguarda um instante para garantir que tudo (inclusive imagens) carregou
+  setTimeout(() => {
+    const elementToPrint = container.querySelector(`#sheet-pdf-${sheet.id}`);
+    if (elementToPrint) {
+      html2pdf()
+        .from(elementToPrint)
+        .set({
+          margin: 10,
+          filename: `${sheet.characterName || 'ficha'}.pdf`,
+          html2canvas: { useCORS: true, scale: 2 },
+          jsPDF: { unit: 'mm', format: [240, 190], orientation: 'landscape' },
+        })
+        .save()
+        .finally(() => {
+          // 4. Limpa o container da página após o download
+          document.body.removeChild(container);
+        });
+    }
+  }, 500); // 500ms de espera é um bom valor
+};
 
   // Renderização do componente
   return (
@@ -174,6 +148,10 @@ export default function Sheets() {
                 className="action-button download"
               >
                 <FileDown size={24} strokeWidth={1.25} color="#fff" />
+              </button>
+
+              <button className="edit-btn" onClick={() => navigate(`/edit/${sheet.id}`)}>
+                Editar
               </button>
 
               <button 
