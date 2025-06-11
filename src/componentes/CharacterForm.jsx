@@ -53,16 +53,34 @@ function CharacterForm({ onCharacterSubmit }) {
     }));
   }
 
-  // Lida com upload de imagem e gera preview
+  // NOVA FUNÇÃO para lidar com a inserção da URL da imagem
+  function handleImageUrlChange(e) {
+    const newUrl = e.target.value;
+    if (character.image && character.image.startsWith('data:image')) {
+      if (!window.confirm("Você já fez upload de um arquivo. Deseja substituí-lo por esta URL?")) {
+        return;
+      }
+    }
+    setCharacter((prev) => ({ ...prev, image: newUrl }));
+  }
+
+  // FUNÇÃO ATUALIZADA para lidar com o upload, convertendo para Base64
   function handleImageChange(e) {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Cria uma URL temporária
-      setCharacter((prev) => ({
-        ...prev,
-        image: imageUrl,
-      }));
+    if (!file) return;
+    
+    if (character.image && character.image.startsWith('http')) {
+      if (!window.confirm("Você já inseriu uma URL. Deseja substituí-la por este arquivo?")) {
+        e.target.value = null;
+        return;
+      }
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCharacter((prev) => ({ ...prev, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
   }
 
   // Envia os dados do personagem
@@ -152,19 +170,30 @@ function CharacterForm({ onCharacterSubmit }) {
       </div>
 
       {/* Upload de imagem */}
-      <label>
-        Imagem do Personagem:
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        <label htmlFor="image">URL da Imagem:</label>
-        <input
+      {/* NOVA ESTRUTURA PARA A IMAGEM */}
+      <div className="form-section">
+        <div className="form-linha">
+          <label htmlFor="image-url">URL:</label>
+          <input
             type="url"
+            id="image-url"
             name="image"
-            id="image"
             placeholder="https://exemplo.com/imagem.jpg"
-            value={character.image || ''}
-            onChange={handleTextChange} // Reutilize a função que já lida com texto
-        />
-      </label>
+            value={character.image && character.image.startsWith('http') ? character.image : ''}
+            onChange={handleImageUrlChange}
+          />
+        </div>
+
+        <div className="form-linha">
+          <label htmlFor="file-upload">Arquivo:</label>
+          <input
+            type="file"
+            id="file-upload"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+      </div>
 
       {/* Pré-visualização da imagem */}
       {character.image && (

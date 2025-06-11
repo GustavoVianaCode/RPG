@@ -57,13 +57,37 @@ function EditPage() {
   }, [sheetId, user, navigate]);
 
   // Função para lidar com o salvamento das edições
-  const handleSaveChanges = async (updatedData) => {
-    // AQUI VOCÊ IMPLEMENTARÁ A LÓGICA DE UPDATE (PUT /api/characters/:id)
-    console.log("Salvar alterações:", updatedData);
-    alert("Funcionalidade de salvar alterações ainda não implementada.");
-    // Exemplo:
-    // await apiClient.put(`/characters/${sheetId}`, updatedData);
-    // navigate('/sheets');
+  const handleSaveChanges = async (updatedDataFromSheet) => {
+    // Pergunta ao usuário se ele realmente quer salvar
+    if (!window.confirm("Deseja mesmo salvar as alterações? A ficha antiga será substituída.")) {
+      return; // Se clicar em "cancelar", a função para aqui
+    }
+
+    try {
+      // "Traduz" os nomes do frontend de volta para o formato que o backend espera
+      const payload = {
+        characterName: updatedDataFromSheet.name,
+        race: updatedDataFromSheet.race,
+        className: updatedDataFromSheet.className,
+        characterImageUrl: updatedDataFromSheet.image,
+        strength: updatedDataFromSheet.Força,
+        dexterity: updatedDataFromSheet.Destreza,
+        constitution: updatedDataFromSheet.Constituição,
+        intelligence: updatedDataFromSheet.Inteligência,
+        wisdom: updatedDataFromSheet.Sabedoria,
+        charisma: updatedDataFromSheet.Carisma,
+      };
+
+      // Faz a requisição PUT para o backend com os dados atualizados
+      await apiClient.put(`/characters/${sheetId}`, payload);
+
+      alert("Ficha atualizada com sucesso!");
+      navigate('/sheets'); // Redireciona de volta para a lista de fichas
+
+    } catch (err) {
+      console.error("Erro ao atualizar a ficha:", err);
+      alert("Não foi possível salvar as alterações. Verifique o console.");
+    }
   };
 
   if (loading) {

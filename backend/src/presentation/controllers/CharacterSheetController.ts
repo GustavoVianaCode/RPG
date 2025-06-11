@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { characterSheetRepository } from "../../infrastructure/database/mockRepositories";
 import { CreateCharacterSheetUseCase } from "../../application/use-cases/CreateCharacterSheetUseCase";
-import { FindCharacterSheetByIdUseCase } from "../../application/use-cases/FindCharacterSheetByIdUseCase"; // << 1. IMPORTE O NOVO USE CASE
+//import { FindCharacterSheetByIdUseCase } from "../../application/use-cases/FindCharacterSheetByIdUseCase"; // possivelmente não usado, mas pode ser útil no futuro
 import { AppError } from "../../application/errors/AppError";
 
 export class CharacterSheetController {
@@ -87,6 +87,32 @@ export class CharacterSheetController {
       res.status(200).json(sheet);
     } catch (err) {
       next(err);
+    }
+  }
+
+  public static async update(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { id: sheetId } = req.params; // Pega o ID da ficha a ser atualizada
+      const userId = req.user.id; // Pega o ID do usuário logado
+      const dataToUpdate = req.body; // Pega os novos dados do corpo da requisição
+
+      // Primeiro, verifica se a ficha realmente pertence ao usuário
+      const sheet = await characterSheetRepository.findById(sheetId);
+      if (!sheet || sheet.userId !== userId) {
+        throw new AppError("Você não tem permissão para editar esta ficha.", 403);
+      }
+
+      // Chama o método update do repositório
+      const updatedSheet = await characterSheetRepository.update(sheetId, dataToUpdate);
+      
+      // Retorna a ficha atualizada
+      res.status(200).json(updatedSheet);
+    } catch (err) {
+      next(err); // Passa qualquer erro para o handler global
     }
   }
 

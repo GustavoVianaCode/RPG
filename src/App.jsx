@@ -1,6 +1,6 @@
 // Importa React e hooks do React e React Router
 import React, { useState, useContext } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 // Importa as páginas do app
 import Home from "./pages/Home";
 import Create from "./pages/Create";
@@ -24,6 +24,7 @@ export default function App() {
 
   // Hook de navegação do React Router
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Função chamada ao clicar no botão de logout
   const handleLogout = () => {
@@ -44,11 +45,13 @@ export default function App() {
         }}
       >
         {/* Link do botão de início (home) */}
-        <nav>
-          <Link to="/" className="icon-button">
-            <img src="/imagens/inicio_icon.png" alt="Início" />
-          </Link>
-        </nav>
+        {location.pathname !== '/' && (
+          <nav nav>
+            <Link to="/" className="icon-button">
+              <img src="/imagens/inicio_icon.png" alt="Início" />
+            </Link>
+          </nav>
+        )}
 
         {/* Área da direita do cabeçalho: depende se está logado ou não */}
         <div>
@@ -56,7 +59,7 @@ export default function App() {
             // Se o usuário estiver logado
             <>
               {/* Saudação com nome do usuário */}
-              <span
+              <spanD
                 style={{
                   marginRight: "6rem",
                   fontSize: "2.5rem",
@@ -67,7 +70,7 @@ export default function App() {
                 }}
               >
                 Olá, {user.username}!
-              </span>
+              </spanD>
 
               {/* Botão para ver fichas salvas */}
               <button
