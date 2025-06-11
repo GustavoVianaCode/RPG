@@ -45,13 +45,13 @@ export default function App() {
         }}
       >
         {/* Link do botão de início (home) */}
-        {location.pathname !== '/' && (
-          <nav nav>
+        <nav>
+          {location.pathname !== '/' && (
             <Link to="/" className="icon-button">
               <img src="/imagens/inicio_icon.png" alt="Início" />
             </Link>
-          </nav>
-        )}
+          )}
+        </nav>
 
         {/* Área da direita do cabeçalho: depende se está logado ou não */}
         <div>
