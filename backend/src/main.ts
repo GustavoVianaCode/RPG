@@ -9,6 +9,8 @@ import cors from "cors";
 import { authRouter } from "./presentation/routes/auth.routes";
 import { characterRouter } from "./presentation/routes/character.routes";
 import { AppError } from "./application/errors/AppError";
+import passport from "passport";
+import "./shared/utils/passport-setup"; 
 
 const app = express();
 
@@ -19,6 +21,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.use(passport.initialize());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 

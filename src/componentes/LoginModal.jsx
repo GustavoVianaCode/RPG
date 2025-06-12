@@ -59,6 +59,12 @@ export function LoginModal({ isOpen, onClose }) {
           required
         />
 
+         {/* Botão de Login com Google */}
+        <a href="http://localhost:5000/api/auth/google" className="google-login-button">
+          <img src="/imagens/google-icon.png" alt="Google icon" /> {/* Baixe um ícone do Google */}
+          Entrar com o Google
+        </a>
+
         {/* Exibe mensagem de erro se houver */}
         {error && (
           <p className="error-message" style={{ color: "red" }}>

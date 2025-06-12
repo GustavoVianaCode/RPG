@@ -13,20 +13,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // useEffect é executado uma vez quando o componente carrega
-  // Aqui, ele verifica se já existe um usuário salvo no localStorage
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token"); // busca o token salvo
-  //   const storedUser = localStorage.getItem("user"); // busca o usuário salvo
-  //   if (token && storedUser) {
-  //     // Se existir token e usuário, define o usuário no estado
-  //     setUser(JSON.parse(storedUser)); // transforma a string em objeto novamente
-      
-  //     // Configura o token para todas as requisições futuras
-  //     apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  //   }
-  // }, []);  // Função para registrar um novo usuário
-
   useEffect(() => {
   const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user");
@@ -129,7 +115,20 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Função para sair (logout)
+  const handleOauthLogin = (token, userData) => {
+    setLoading(true);
+    // Salva o token e usuário no localStorage
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    
+    // Configura o token para todas as requisições futuras
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+    // Define o usuário no estado do contexto
+    setUser(userData);
+    setLoading(false);
+  };
+  
   const logout = () => {
     localStorage.removeItem("token"); // remove token do navegador
     localStorage.removeItem("user"); // remove usuário salvo
@@ -141,7 +140,7 @@ export function AuthProvider({ children }) {
 
   // Retornamos o contexto com as informações e funções disponíveis
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, handleOauthLogin }}>
       {children} {/* Renderiza todos os componentes filhos do app */}
     </AuthContext.Provider>
   );

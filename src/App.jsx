@@ -13,6 +13,8 @@ import { AuthContext } from "./context/AuthContext";
 import EditPage from './pages/EditPage';  // Importa a página de edição de ficha adicionado 10.06.2025
 // Importa o CSS global do app
 import "../src/App.css";
+import AuthCallback from './pages/AuthCallback';
+
 // Componente principal da aplicação
 export default function App() {
   // Acesso ao usuário e função de logout a partir do contexto
@@ -126,6 +128,8 @@ export default function App() {
 
           <Route path="/edit/:sheetId" element={<EditPage />} /> {/* Rota da página de edição de ficha, visível apenas se o usuário estiver logado adicionado 10.06.2025 */}
 
+          {/* Rota de callback para autenticação OAuth */}
+          <Route path="/auth/callback" element={<AuthCallback />} />
           {/* Rota das fichas salvas, visível apenas se o usuário estiver logado */}
           {user && <Route path="/sheets" element={<Sheets />} />}
         </Routes>

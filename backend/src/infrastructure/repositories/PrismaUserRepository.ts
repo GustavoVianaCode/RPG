@@ -82,4 +82,26 @@ export class PrismaUserRepository implements IUserRepository {
       updatedAt: user.updatedAt,
     };
   }
+
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    const user = await prisma.user.findUnique({ where: { googleId } });
+    if (!user) return null;
+    return {
+      ...user,
+      passwordHash: user.passwordHash ?? undefined,
+      googleId: user.googleId ?? undefined,
+    };
+  }
+
+  async update(id: string, data: Partial<Omit<User, "id" | "createdAt" | "updatedAt">>): Promise<User> {
+    const user = await prisma.user.update({
+      where: { id },
+      data,
+    });
+    return {
+      ...user,
+      passwordHash: user.passwordHash ?? undefined,
+      googleId: user.googleId ?? undefined,
+    };
+  }
 }

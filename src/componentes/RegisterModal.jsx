@@ -4,6 +4,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext"; // Importa o contexto de autenticação
 import { Modal } from "./Modal"; // Importa o componente Modal reutilizável
+import "../style/Modal.css"; //
 
 // Componente que exibe o modal de cadastro de usuário
 export function RegisterModal({ isOpen, onClose }) {
@@ -95,6 +96,11 @@ export function RegisterModal({ isOpen, onClose }) {
             {error}
           </p>
         )}
+
+        <a href="http://localhost:5000/api/auth/google" className="google-login-button">
+          <img src="/imagens/google-icon.png" alt="Google icon" />
+          Cadastrar com o Google
+        </a>
 
         {/* Botão de envio */}
         <button type="submit" disabled={loading}>
