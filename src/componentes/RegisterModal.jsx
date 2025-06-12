@@ -7,7 +7,7 @@ import { Modal } from "./Modal"; // Importa o componente Modal reutilizável
 import "../style/Modal.css"; //
 
 // Componente que exibe o modal de cadastro de usuário
-export function RegisterModal({ isOpen, onClose }) {
+export function RegisterModal({ isOpen, onClose, onLoginClick }) {
   // Acessa a função de cadastro do AuthContext
   const { register } = useContext(AuthContext);
 
