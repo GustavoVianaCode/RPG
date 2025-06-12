@@ -10,12 +10,12 @@ import { useNavigate } from "react-router-dom"; // Para redirecionar após salva
 import { Heart, Shield } from "lucide-react";
 
 // Componente principal da ficha
-const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
+const CharacterSheet = ({ character, onSaveEdit, onEditClick, isInitiallyEditing = false }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext); // Acessar o usuário logado do contexto
 
   const [isDirty, setIsDirty] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isInitiallyEditing);
   const [saveStatus, setSaveStatus] = useState({ loading: false, error: null });
   const [edited, setEdited] = useState({
     name: "",
@@ -333,15 +333,17 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick }) => {
         ) : (
           <>
             <button onClick={() => setIsEditing(true)}>✏️ Editar Ficha</button>
-            <button onClick={handleGeneratePDF}>📄 Gerar PDF</button>
-            {/* BOTÃO DE SALVAR NO BANCO DE DADOS - Só mostra se o usuário estiver logado */}
-            {user && (
-              <button 
-                onClick={handleSaveSheetToDb} 
-                disabled={saveStatus.loading}
-              >
-                {saveStatus.loading ? "Salvando..." : "💾 Salvar Ficha"}
-              </button>
+            {/* ### INÍCIO DA MUDANÇA ### */}
+            {/* Estes dois botões só aparecerão se NÃO estivermos na página de edição */}
+            {!isInitiallyEditing && (
+              <>
+                <button onClick={handleGeneratePDF}>📄 Gerar PDF</button>
+                {user && (
+                  <button onClick={handleSaveSheetToDb} /*...*/ >
+                    💾 Salvar Ficha
+                  </button>
+                )}
+              </>
             )}
           </>
         )}
