@@ -13,11 +13,7 @@ export class PrismaUserRepository implements IUserRepository {
       });
       
       const user = await prisma.user.create({
-        data: {
-          username: data.username,
-          email: data.email,
-          passwordHash: data.passwordHash,
-        },
+        data: data,
       });
       
       console.log("PrismaUserRepository.create - user created successfully:", {
@@ -30,7 +26,7 @@ export class PrismaUserRepository implements IUserRepository {
         id: user.id,
         username: user.username,
         email: user.email,
-        passwordHash: user.passwordHash,
+        passwordHash: user.passwordHash ?? undefined,
         googleId: user.googleId ?? undefined,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,

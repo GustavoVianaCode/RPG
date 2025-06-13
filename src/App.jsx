@@ -61,7 +61,7 @@ export default function App() {
             // Se o usuário estiver logado
             <>
               {/* Saudação com nome do usuário */}
-              <spanD
+              <span
                 style={{
                   marginRight: "6rem",
                   fontSize: "2.5rem",
@@ -72,7 +72,7 @@ export default function App() {
                 }}
               >
                 Olá, {user.username}!
-              </spanD>
+              </span>
 
               {/* Botão para ver fichas salvas */}
               <button
