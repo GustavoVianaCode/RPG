@@ -15,7 +15,7 @@ function AuthCallback() {
       try {
         const userData = JSON.parse(decodeURIComponent(userParam));
         handleOauthLogin(token, userData); // Salva os dados
-        navigate('/sheets'); // Redireciona para a página de fichas
+        navigate('/'); // Redireciona para a home após login
       } catch (error) {
         console.error("Erro ao processar dados de autenticação:", error);
         navigate('/'); // Redireciona para home em caso de erro
