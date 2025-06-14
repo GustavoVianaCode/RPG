@@ -90,7 +90,9 @@
   margin-bottom: 1rem;
 }
 .google-login-button:hover {
-  background-color: #f1f1f1;
+  background-color: #b9b9b9;
+  transform: scale(1.03); /* Efeito de crescimento sutil */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
 }
 .google-login-button img {
   width: 20px;

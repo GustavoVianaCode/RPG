@@ -67,7 +67,7 @@
 
 /* Estilo para cada CARD de ficha individual */
 .sheet-card {
-  background-color: rgba(255, 255, 255, 0.95); /* Fundo quase branco com leve transparência */
+  background-color: #f8ebd3; /* Fundo quase branco com leve transparência */
   border-radius: 18px; /* Cantos mais arredondados */
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Sombra mais pronunciada */
   padding: 1.8rem; /* Espaçamento interno do card */
@@ -126,36 +126,49 @@
   color: #6b5e45; /* Cor mais suave para os detalhes */
 }
 
-.action-button {
-  background-color: #0a7122 !important; /* Cor de fundo verde escuro para o botão */
-  color: #fff !important; /* Texto/ícone branco */
-  border: 2px solid #075c1d !important; /* Borda mais escura */
-  padding: 0.8rem 1.2rem; /* Aumenta o padding para botões maiores */
-  border-radius: 10px; /* Cantos arredondados */
-  cursor: pointer;
-  font-size: 1.1rem; /* Texto maior nos botões */
-  font-family: "FonteHome", sans-serif; /* Fonte personalizada */
-  display: flex; /* Para alinhar o ícone e o texto */
-  align-items: center; /* Alinha verticalmente */
-  justify-content: center; /* Centraliza o conteúdo (ícone + texto) */
-  gap: 0.6rem; /* Espaço entre ícone e texto */
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+.sheet-card .sheet-actions {
+  width: 100%;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  margin-top: auto; 
+  padding-top: 1rem;
 }
 
-.action-button:hover {
-  background-color: #4caf50 !important; /* Verde mais claro no hover */
-  transform: translateY(-5px); /* Efeito de elevação no hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra mais forte no hover */
+/* Estilo base para os 3 botões */
+.sheet-card .action-button {
+  background-color: #482705 !important; 
+  color: #fff !important; 
+  border: 2px solid #3a1e03 !important;
+  border-radius: 10px;
+  padding: 0.7rem; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  cursor: pointer; /* Garante que o cursor seja uma mãozinha */
 }
 
-/* Estilo específico para o botão de deletar */
-.action-button.delete {
-  background-color: #950602 !important; /* Vermelho escuro para deletar */
-  border-color: #6a0400 !important; /* Borda mais escura */
+.sheet-card .action-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
-.action-button.delete:hover {
-  background-color: #d32f2f !important; /* Vermelho mais claro no hover */
+/* Cores específicas para cada botão no HOVER */
+.sheet-card .action-button.download:hover {
+  background-color: #0a7122 !important; 
+  border-color: #075c1d !important;
+}
+
+.sheet-card .action-button.edit:hover {
+  background-color: #0069d9 !important; 
+  border-color: #0056b3 !important;
+}
+
+.sheet-card .action-button.delete:hover{
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
 }
 
 /* Media Queries para responsividade */

@@ -150,8 +150,12 @@ export default function Sheets() {
                 <FileDown size={24} strokeWidth={1.25} color="#fff" />
               </button>
 
-              <button className="edit-btn" onClick={() => navigate(`/edit/${sheet.id}`)}>
-                Editar
+              <button 
+                title="Editar" 
+                onClick={() => navigate(`/edit/${sheet.id}`)}
+                className="action-button edit"
+              >
+                <Pencil size={24} strokeWidth={1.25} color="#fff" />
               </button>
 
               <button 
