@@ -94,7 +94,7 @@
   border-radius: 10px; /* Cantos arredondados para a imagem */
   overflow: hidden; /* Garante que a imagem se ajuste ao contêiner */
   margin-bottom: 1.5rem; /* Espaçamento abaixo da imagem */
-  border: 4px solid #950602; /* Borda vermelha forte para a imagem */
+  border: 4px solid #482705; /* Borda vermelha forte para a imagem */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -106,7 +106,7 @@
 
 /* Seção de informações do personagem dentro do card */
 .sheet-info {
-  margin-bottom: 1.8rem; /* Espaçamento abaixo das informações */
+  margin-bottom: 0.5rem; /* Espaçamento abaixo das informações */
   width: 100%; /* Garante que as informações ocupem a largura do card */
 }
 
