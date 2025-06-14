@@ -63,3 +63,13 @@ header button {
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000; /* abaixo dos modais, acima do resto */
 }
+
+.greeting-text {
+  margin-right: 6rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  vertical-align: top;
+  transform: translateY(-3px);
+  display: inline-block;
+  color: #482705; /* Você pode adicionar a cor aqui também */
+}

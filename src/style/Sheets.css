@@ -35,8 +35,8 @@
 .sheets-title {
   font-size: 3rem; /* Tamanho grande para o título */
   margin-bottom: 2rem; /* Espaçamento abaixo do título */
-  color: #f0e6d6; /* Cor do título que contrasta com o fundo */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombra para o título para melhor legibilidade */
+  color: #482705; /* Cor do título que contrasta com o fundo */
+  text-shadow: 4px 4px 4px rgba(255, 255, 255, 0.7); /* Sombra para o título para melhor legibilidade */
 }
 
 /* Estilos para mensagens de carregamento, erro e "sem fichas" */

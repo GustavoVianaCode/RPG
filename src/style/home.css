@@ -13,7 +13,7 @@
   text-align: center;
   background: url("/imagens/background.gif") no-repeat center center fixed; /* Cor de fundo */
   background-size: cover;
-  color: #9e4949; /* Cor do texto */
+  color: #482705; /* Cor do texto */
   min-height: 100vh; /* Ocupa toda a altura da tela */
   padding: 40px 20px;
   display: flex;

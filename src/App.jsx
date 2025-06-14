@@ -61,16 +61,7 @@ export default function App() {
             // Se o usuário estiver logado
             <>
               {/* Saudação com nome do usuário */}
-              <span
-                style={{
-                  marginRight: "6rem",
-                  fontSize: "2.5rem",
-                  fontWeight: "bold",
-                  verticalAlign: "top",
-                  transform: "translateY(-3px)",
-                  display: "inline-block",
-                }}
-              >
+              <span className="greeting-text">
                 Olá, {user.username}!
               </span>
 
