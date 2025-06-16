@@ -207,7 +207,7 @@ const CharacterSheet = ({ character, onSaveEdit, onEditClick, isInitiallyEditing
               {isEditing ? (
                 <select
                   value={edited.className} // ou edited.className
-                  onChange={(e) => handleChange("class", e.target.value)} // ou "className"
+                  onChange={(e) => handleChange("className", e.target.value)} // ou "className"
                 >
                   <option value="">Selecione...</option>
                   <option value="Guerreiro">Guerreiro</option>
