@@ -1,16 +1,20 @@
 // Importa React e hooks do React e React Router
 import React, { useState, useContext } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+
 // Importa as páginas do app
 import Home from "./pages/Home";
 import Create from "./pages/Create";
 import Sheets from "./pages/Sheets";
+
 // Importa os modais de login e cadastro
 import { LoginModal } from "./componentes/LoginModal";
 import { RegisterModal } from "./componentes/RegisterModal";
+
 // Importa o contexto de autenticação
 import { AuthContext } from "./context/AuthContext";
 import EditPage from './pages/EditPage';  // Importa a página de edição de ficha adicionado 10.06.2025
+
 // Importa o CSS global do app
 import "../src/App.css";
 import AuthCallback from './pages/AuthCallback';

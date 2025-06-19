@@ -170,7 +170,6 @@ function CharacterForm({ onCharacterSubmit }) {
       </div>
 
       {/* Upload de imagem */}
-      {/* NOVA ESTRUTURA PARA A IMAGEM */}
       <div className="form-section">
         <div className="form-linha">
           <label htmlFor="image-url">URL:</label>
